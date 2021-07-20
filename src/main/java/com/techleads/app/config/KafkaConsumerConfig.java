@@ -17,25 +17,29 @@ import com.techleads.app.common.KafkaConstants;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 
-@Configuration
+//@Configuration
 public class KafkaConsumerConfig {
 	
-	@Bean
+//	@Bean
 	public ConsumerFactory<String, MyMessages> consumerFactory(){
-		JsonDeserializer<MyMessages> deserializer = new JsonDeserializer<>(MyMessages.class);
-	    deserializer.setRemoveTypeHeaders(false);
-	    deserializer.addTrustedPackages("com.techleads.app.avro.MyMessages");
-	    deserializer.setUseTypeMapperForKey(true);
+		
+	
+
 		
 		Map<String, Object> configProps=new HashMap<>();
+		
 		configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,KafkaConstants.BOOTSTRAPSERVERS);
 		configProps.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.GROUP_ID);
-		configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-		configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
-		configProps.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, KafkaConstants.SCHEMAREGISTRYSERVERS);
+		configProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 		
-		return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(), deserializer);
+		configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+		configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
+		configProps.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, KafkaConstants.SCHEMAREGISTRYSERVERS);
+		configProps.put("specific.avro.reader","true");
+		
+//		return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(),new JsonDe);
+		return null;
 		
 		
 		
@@ -45,7 +49,7 @@ public class KafkaConsumerConfig {
 	
 	
 	
-	@Bean
+//	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, MyMessages> kafkaListenerContainerFactory(){
 		ConcurrentKafkaListenerContainerFactory<String, MyMessages> factory=new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());

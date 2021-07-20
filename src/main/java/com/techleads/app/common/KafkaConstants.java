@@ -6,6 +6,7 @@ public interface KafkaConstants {
 	String GROUP_ID="messagesGroup";
 	String APP_ID="messagesID123";
 	String SCHEMAREGISTRYSERVERS = "http://localhost:8081";
-	String AUTO_OFFSET_RESET_CONFIG="earliest";
+	String ACKS_CONFIG_VAL="1";
+	String RETRIES_CONFIG_VAL="10";
 
 }
