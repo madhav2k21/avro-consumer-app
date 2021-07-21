@@ -11,10 +11,9 @@ import com.techleads.app.common.KafkaConstants;
 @Service
 public class KafkaConsumerService {
 	static Logger logger = LoggerFactory.getLogger(KafkaConsumerService.class);
-
-	@KafkaListener(topics = KafkaConstants.TOPIC, groupId = KafkaConstants.GROUP_ID)
+//	@KafkaListener(topics = KafkaConstants.TOPIC, groupId = KafkaConstants.GROUP_ID)
 	public MyMessages listener(MyMessages myMessage) {
-		logger.info("***Message received from kafka topic:: " + myMessage);
+		logger.info("***Message received from kafka topic:: " + myMessage.getMsgId()+" "+myMessage.getMessage().toString());
 		return myMessage;
 	}
 
